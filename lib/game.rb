@@ -9,7 +9,6 @@ class Game
     shuffle_cards
     assign_cards_to_decks
     assign_decks_to_players
-    take_turns
   end
 
 
@@ -46,8 +45,34 @@ class Game
     @player2 = Player.new("Aurora", @deck2)
   end
 
-  def take_turns
-    Turn.new(@player1, @player2)
-  end
+  def start
+    turns = 0
 
+    1000000.times do
+      if @player1.deck.cards == []
+        p "*~*~*~* #{@player2.name} has won the game! *~*~*~*"
+        break
+      elsif @player2.deck.cards == []
+        p "*~*~*~* #{@player1.name} has won the game! *~*~*~*"
+        break
+      elsif turns == 1000001
+        p "---- DRAW ----"
+        break
+      elsif (@player1.deck.cards.length != 0) && (@player2.deck.cards.length != 0)
+        current_turn = Turn.new(@player1, @player2)
+        turns += 1
+          if current_turn.type == :basic
+            p "Turn #{turns}: #{current_turn.winner.name} won 2 cards."
+          elsif current_turn.type == :war
+            p "Turn #{turns}: WAR - #{current_turn.winner.name} won 6 cards."
+          elsif current_turn.type == :mutually_assured_destruction
+            p "Turn #{turns}: *mutually assured destruction* 6 cards removed from play."
+          end
+        current_turn.pile_cards
+          if current_turn.type == :basic || current_turn.type == :war
+            current_turn.award_spoils(current_turn.winner)
+          end
+      end
+    end
+  end
 end
