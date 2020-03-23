@@ -17,7 +17,7 @@ class Turn
   def set_turn_type
     if @player1.deck.cards[0].rank != @player2.deck.cards[0].rank
       @type = :basic
-    elsif (@player1.deck.cards[0].rank == @player2.deck.cards[0].rank) && (@player1.deck.cards[2].rank == @player2.deck.cards[2].rank)
+    elsif (@player1.deck.cards.length >= 3 && @player2.deck.cards.length >=3) && (@player1.deck.cards[0].rank == @player2.deck.cards[0].rank) && (@player1.deck.cards[2].rank == @player2.deck.cards[2].rank)
       @type = :mutually_assured_destruction
     elsif @player1.deck.cards[0].rank == @player2.deck.cards[0].rank
       @type = :war
@@ -26,13 +26,21 @@ class Turn
 
   def winner
     if @type == :basic
-      if @player1.deck.cards[0].rank >  @player2.deck.cards[0].rank
+      if @player1.deck.cards[0] == nil
+        @player2
+      elsif @player2.deck.cards[0] == nil
+        @player1
+      elsif @player1.deck.cards[0].rank >  @player2.deck.cards[0].rank
         @player1
       else
         @player2
       end
     elsif @type == :war
-      if @player1.deck.cards[2].rank > @player2.deck.cards[2].rank
+      if @player1.deck.cards[2] == nil
+        @player2
+      elsif @player2.deck.cards[2] == nil
+        @player1
+      elsif @player1.deck.cards[2].rank > @player2.deck.cards[2].rank
         @player1
       else
         @player2
