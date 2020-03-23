@@ -6,6 +6,10 @@ require './lib/turn'
 class Game
   def initialize
     create_cards
+    shuffle_cards
+    assign_cards_to_decks
+    assign_decks_to_players
+    take_turns
   end
 
 
@@ -29,6 +33,21 @@ class Game
   end
 
   def shuffle_cards
-    @cards.shuffle
+    @cards.shuffle!
   end
+
+  def assign_cards_to_decks
+    @deck1 = Deck.new(@cards[0..25])
+    @deck2 = Deck.new(@cards[26..52])
+  end
+
+  def assign_decks_to_players
+    @player1 = Player.new("Megan", @deck1)
+    @player2 = Player.new("Aurora", @deck2)
+  end
+
+  def take_turns
+    Turn.new(@player1, @player2)
+  end
+
 end
