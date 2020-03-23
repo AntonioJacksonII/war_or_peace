@@ -29,6 +29,7 @@ class Game
       @cards << Card.new(suit, 'King', 13)
       @cards << Card.new(suit, 'Ace', 14)
     end
+    return @cards
   end
 
   def shuffle_cards
